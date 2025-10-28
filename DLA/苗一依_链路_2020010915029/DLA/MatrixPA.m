@@ -1,0 +1,22 @@
+%功放模型
+%输入
+%   yno=[Y1,Y2,Y3];
+%   Y1=[y3,y2,..,yn+0]^T;
+%   Y2=[y2,y3,..,yn+1]^T;
+%   Y3=[y3,y4,..,yn+2]^T;
+function y=MatrixPA(yno)
+    %pwrIN = sum(abs(yn(:,1)).^2)/length(yn(:,1)); 输入输出归一化
+     Y = [yno(:,1),yno(:,1).*abs(yno(:,1)).^2,yno(:,1).*abs(yno(:,1)).^4,...
+          yno(:,2),yno(:,2).*abs(yno(:,2)).^2,yno(:,2).*abs(yno(:,2)).^4,...
+          yno(:,3),yno(:,3).*abs(yno(:,3)).^2,yno(:,3).*abs(yno(:,3)).^4];
+    %PA模型参数
+    %k=5,q=2
+    Bkq = [ 1.0513+0.0904j, -0.0542-0.2900j, -0.9657-0.7028j,...
+           -0.0680-0.0023j,  0.2234+0.2317j, -0.2451-0.3735j,...
+            0.0289-0.0054j, -0.0621-0.0932j,  0.1229+0.1508j];%dinglei
+
+    y = (Y)*Bkq';
+    % pwrOU = sum(abs(y(:,1)).^2)/length(y(:,1));
+    pwrOU = 1; pwrIN = 1;
+    y = y./sqrt(pwrOU).*sqrt(pwrIN); 
+end
